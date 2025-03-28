@@ -1,7 +1,10 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { ZakatResults } from '@/utils/zakatCalculations';
 import { Button } from '@/components/ui/button';
+import { Share, Download, Image } from 'lucide-react';
+import html2canvas from 'html2canvas';
+import { toast } from 'sonner';
 
 interface ZakatResultProps {
   results: ZakatResults | null;
@@ -9,6 +12,8 @@ interface ZakatResultProps {
 }
 
 const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
+  const resultRef = useRef<HTMLDivElement>(null);
+
   if (!results) return null;
 
   const formatCurrency = (amount: number) => {
@@ -20,9 +25,64 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
     }).format(amount);
   };
 
+  const handleSaveImage = async () => {
+    if (!resultRef.current) return;
+
+    try {
+      const canvas = await html2canvas(resultRef.current, {
+        backgroundColor: '#ffffff',
+        scale: 2,  // Higher scale for better quality
+        logging: false,
+      });
+      
+      const image = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'zakat-calculation.png';
+      link.href = image;
+      link.click();
+      
+      toast.success('Zakat results saved as image');
+    } catch (err) {
+      console.error('Failed to save image:', err);
+      toast.error('Failed to save image');
+    }
+  };
+
+  const handleShare = async () => {
+    if (!resultRef.current) return;
+    
+    try {
+      if (navigator.share) {
+        const canvas = await html2canvas(resultRef.current, {
+          backgroundColor: '#ffffff',
+          scale: 2,
+        });
+        
+        const image = canvas.toDataURL('image/png');
+        
+        // Convert base64 to blob
+        const blob = await (await fetch(image)).blob();
+        
+        await navigator.share({
+          title: 'My Zakat Calculation Results',
+          text: 'Here are my Zakat calculation results',
+          files: [new File([blob], 'zakat-calculation.png', { type: 'image/png' })],
+        });
+        
+        toast.success('Successfully shared results');
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        toast.info('Sharing not supported on this browser');
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+      toast.error('Failed to share results');
+    }
+  };
+
   return (
     <div className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-in-right">
-      <div className="glass-card p-6 space-y-6">
+      <div ref={resultRef} className="glass-card p-6 space-y-6">
         <h2 className="text-xl font-semibold text-zakat-800 text-center">Zakat Calculation Results</h2>
         
         <div className="space-y-5">
@@ -60,16 +120,34 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
             </p>
           </div>
         )}
+      </div>
+      
+      <div className="mt-6 flex justify-center gap-3">
+        <Button 
+          onClick={onReset}
+          variant="outline" 
+          className="border-zakat-300 text-zakat-700 hover:bg-zakat-50 px-6 py-2 rounded-full"
+        >
+          Calculate Again
+        </Button>
         
-        <div className="mt-6 flex justify-center">
-          <Button 
-            onClick={onReset}
-            variant="outline" 
-            className="border-zakat-300 text-zakat-700 hover:bg-zakat-50 px-6 py-2 rounded-full"
-          >
-            Calculate Again
-          </Button>
-        </div>
+        <Button
+          onClick={handleSaveImage}
+          variant="outline"
+          className="border-zakat-300 text-zakat-700 hover:bg-zakat-50 px-4 py-2 rounded-full"
+        >
+          <Download className="mr-1 h-4 w-4" />
+          Save
+        </Button>
+        
+        <Button
+          onClick={handleShare}
+          variant="outline"
+          className="border-zakat-300 text-zakat-700 hover:bg-zakat-50 px-4 py-2 rounded-full"
+        >
+          <Share className="mr-1 h-4 w-4" />
+          Share
+        </Button>
       </div>
     </div>
   );
