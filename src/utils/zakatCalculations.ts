@@ -1,3 +1,4 @@
+
 export interface ZakatValues {
   cashAmount: number;
   goldValue: number;
@@ -27,12 +28,34 @@ export interface ZakatFitrResults {
   totalAmount: number;
 }
 
-// Calculate Nisab threshold (approximately)
-// Note: In a real implementation, this would be fetched from an API as it changes based on current gold/silver prices
-const calculateNisabThreshold = (): number => {
-  // This is an approximation based on the value of 87.48 grams of gold
-  // In a real world app, this would be dynamically updated based on current gold prices
-  return 3500; // Example value in a common currency
+// Configurable values for admins
+export const PreciousMetalPrices = {
+  // Gold price per gram in USD (sample value - should be updated regularly)
+  goldPricePerGram: 75.50,
+  
+  // Silver price per gram in USD (sample value - should be updated regularly)
+  silverPricePerGram: 0.95,
+  
+  // Weight of nisab in gold (87.48 grams)
+  nisabGoldWeight: 87.48,
+  
+  // Weight of nisab in silver (612.36 grams)
+  nisabSilverWeight: 612.36,
+  
+  // Zakat rate (2.5%)
+  zakatRate: 0.025,
+  
+  // Zakat al-Fitr amount per person in USD (can be adjusted based on local costs)
+  fitrAmountPerPerson: 10
+};
+
+// Calculate Nisab threshold based on the lower of gold and silver values
+export const calculateNisabThreshold = (): number => {
+  const goldNisab = PreciousMetalPrices.goldPricePerGram * PreciousMetalPrices.nisabGoldWeight;
+  const silverNisab = PreciousMetalPrices.silverPricePerGram * PreciousMetalPrices.nisabSilverWeight;
+  
+  // Islamic principle is to use the lower of the two values to make Zakat more accessible
+  return Math.min(goldNisab, silverNisab);
 };
 
 export const calculateZakat = (values: ZakatValues): ZakatResults => {
@@ -57,7 +80,7 @@ export const calculateZakat = (values: ZakatValues): ZakatResults => {
   const eligibleForZakat = netZakatableAmount >= nisabThreshold;
 
   // Calculate zakat payable (2.5% of net zakatable amount if eligible)
-  const zakatPayable = eligibleForZakat ? netZakatableAmount * 0.025 : 0;
+  const zakatPayable = eligibleForZakat ? netZakatableAmount * PreciousMetalPrices.zakatRate : 0;
 
   return {
     totalAssets,
@@ -77,9 +100,8 @@ export const calculateZakatFitr = (values: ZakatFitrValues): ZakatFitrResults =>
     // 1 Sa'a of food per person
     totalAmount = values.familyMembers;
   } else {
-    // Money equivalent (approximately $10 per person - this varies by region)
-    // In a real implementation, this would be fetched from an API as it changes
-    totalAmount = values.familyMembers * 10;
+    // Money equivalent
+    totalAmount = values.familyMembers * PreciousMetalPrices.fitrAmountPerPerson;
   }
   
   return {
