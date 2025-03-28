@@ -16,7 +16,36 @@ export const en = {
   zakatForm: {
     assets: "Assets",
     liabilities: "Liabilities",
-    calculate: "Calculate Zakat"
+    calculate: "Calculate Zakat",
+    cashBankBalances: "Cash & Bank Balances",
+    goldValue: "Gold Value",
+    silverValue: "Silver Value",
+    otherInvestments: "Other Investments",
+    businessAssets: "Business Assets",
+    debtsLiabilities: "Debts & Liabilities",
+    nisab: {
+      title: "Understanding Nisab",
+      explanation: "Nisab is the minimum amount of wealth a Muslim must possess before they are eligible to pay Zakat. It's calculated based on the value of 87.48 grams of gold or 612.36 grams of silver, whichever is lower.",
+      goldPrice: "Current Gold Price",
+      silverPrice: "Current Silver Price",
+      threshold: "Current Nisab Threshold",
+      gram: "gram"
+    },
+    tooltips: {
+      cashAmount: "Include all cash in hand, checking accounts, savings accounts, and any cash equivalents that you've owned for at least one lunar year.",
+      goldValue: "Include the current market value of all gold you own, including jewelry, coins, and bullion. Gold that's in regular use as jewelry may be exempt in some interpretations. Current gold price: {price}/gram.",
+      silverValue: "Include the current market value of all silver you own, including jewelry, coins, and bullion. Like gold, silver in regular use as jewelry may be exempt in some interpretations. Current silver price: {price}/gram.",
+      otherInvestments: "Include stocks, mutual funds, cryptocurrency, retirement accounts (according to some scholars), rental property values (excluding the portion used for personal residence), and any other non-business investments held for at least one lunar year.",
+      businessAssets: "Include inventory held for sale, raw materials, finished goods, and trade goods. Fixed assets like equipment and buildings used in running the business are generally exempt. Different business types have different Zakat calculations; consult a scholar for specific guidance.",
+      debtsOwed: "Include personal debts due immediately, business debts, short-term loans, credit card balances, outstanding bills, taxes due, and any other liabilities that are currently payable. Long-term mortgage payments (except the amount due now) are typically not deducted."
+    },
+    notes: {
+      title: "Important Notes",
+      note1: "Zakat is calculated on wealth owned for a full lunar year.",
+      note2: "Personal items like your home, car, furniture, and clothing for personal use are exempt.",
+      note3: "Zakat rate is 2.5% of your net zakatable wealth above the nisab threshold.",
+      note4: "This calculator provides a general guideline. For specific situations, consult with a knowledgeable Islamic scholar."
+    }
   },
   zakatResult: {
     title: "Zakat Calculation Results",

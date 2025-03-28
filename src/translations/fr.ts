@@ -16,7 +16,36 @@ export const fr = {
   zakatForm: {
     assets: "Actifs",
     liabilities: "Passifs",
-    calculate: "Calculer la Zakat"
+    calculate: "Calculer la Zakat",
+    cashBankBalances: "Espèces et Soldes Bancaires",
+    goldValue: "Valeur de l'Or",
+    silverValue: "Valeur de l'Argent",
+    otherInvestments: "Autres Investissements",
+    businessAssets: "Actifs Commerciaux",
+    debtsLiabilities: "Dettes et Passifs",
+    nisab: {
+      title: "Comprendre le Nisab",
+      explanation: "Le Nisab est le montant minimum de richesse qu'un musulman doit posséder avant d'être éligible pour payer la Zakat. Il est calculé sur la base de la valeur de 87,48 grammes d'or ou 612,36 grammes d'argent, selon la valeur la plus basse.",
+      goldPrice: "Prix actuel de l'Or",
+      silverPrice: "Prix actuel de l'Argent",
+      threshold: "Seuil actuel du Nisab",
+      gram: "gramme"
+    },
+    tooltips: {
+      cashAmount: "Incluez tout l'argent liquide, les comptes courants, les comptes d'épargne et tout équivalent de trésorerie que vous possédez depuis au moins un an lunaire.",
+      goldValue: "Incluez la valeur marchande actuelle de tout l'or que vous possédez, y compris les bijoux, les pièces et les lingots. L'or utilisé régulièrement comme bijou peut être exempté dans certaines interprétations. Prix actuel de l'or : {price}/gramme.",
+      silverValue: "Incluez la valeur marchande actuelle de tout l'argent que vous possédez, y compris les bijoux, les pièces et les lingots. Comme l'or, l'argent utilisé régulièrement comme bijou peut être exempté dans certaines interprétations. Prix actuel de l'argent : {price}/gramme.",
+      otherInvestments: "Incluez les actions, les fonds communs de placement, la cryptomonnaie, les comptes de retraite (selon certains érudits), les valeurs des propriétés locatives (à l'exclusion de la partie utilisée pour la résidence personnelle), et tout autre investissement non commercial détenu depuis au moins un an lunaire.",
+      businessAssets: "Incluez les stocks destinés à la vente, les matières premières, les produits finis et les marchandises commerciales. Les immobilisations comme l'équipement et les bâtiments utilisés pour exploiter l'entreprise sont généralement exemptés. Différents types d'entreprises ont différents calculs de Zakat ; consultez un érudit pour des conseils spécifiques.",
+      debtsOwed: "Incluez les dettes personnelles dues immédiatement, les dettes commerciales, les prêts à court terme, les soldes de cartes de crédit, les factures impayées, les impôts dus, et tout autre passif actuellement payable. Les paiements hypothécaires à long terme (sauf le montant dû maintenant) ne sont généralement pas déduits."
+    },
+    notes: {
+      title: "Notes Importantes",
+      note1: "La Zakat est calculée sur la richesse possédée pendant une année lunaire complète.",
+      note2: "Les articles personnels comme votre maison, voiture, meubles et vêtements à usage personnel sont exemptés.",
+      note3: "Le taux de Zakat est de 2,5% de votre richesse nette imposable au-dessus du seuil de Nisab.",
+      note4: "Ce calculateur fournit une ligne directrice générale. Pour des situations spécifiques, consultez un érudit islamique qualifié."
+    }
   },
   zakatResult: {
     title: "Résultats du Calcul de Zakat",
