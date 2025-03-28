@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import { ZakatResults } from '@/utils/zakatCalculations';
 import { Button } from '@/components/ui/button';
-import { Share, Download, Image } from 'lucide-react';
+import { Share, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
 
