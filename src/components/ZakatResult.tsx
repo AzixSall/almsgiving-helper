@@ -21,7 +21,6 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
     let currencyCode = currency;
     let localeString = locale === 'fr' ? 'fr-FR' : 'en-US';
     
-    // For XOF, we'll handle it specially since it may not be widely supported
     if (currency === 'XOF') {
       return `${amount.toFixed(0)} ${getCurrencySymbol()}`;
     }
@@ -40,7 +39,7 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
     try {
       const canvas = await html2canvas(resultRef.current, {
         backgroundColor: '#ffffff',
-        scale: 2,  // Higher scale for better quality
+        scale: 2,
         logging: false,
       });
       
@@ -69,7 +68,6 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
         
         const image = canvas.toDataURL('image/png');
         
-        // Convert base64 to blob
         const blob = await (await fetch(image)).blob();
         
         await navigator.share({
@@ -80,7 +78,6 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
         
         toast.success(t('notifications.shareSuccess'));
       } else {
-        // Fallback for browsers that don't support Web Share API
         toast.info(t('notifications.shareNotSupported'));
       }
     } catch (err) {

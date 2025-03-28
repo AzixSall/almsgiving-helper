@@ -33,8 +33,8 @@ export const en = {
     },
     tooltips: {
       cashAmount: "Include all cash in hand, checking accounts, savings accounts, and any cash equivalents that you've owned for at least one lunar year.",
-      goldValue: "Include the current market value of all gold you own, including jewelry, coins, and bullion. Gold that's in regular use as jewelry may be exempt in some interpretations. Current gold price: {price}/gram.",
-      silverValue: "Include the current market value of all silver you own, including jewelry, coins, and bullion. Like gold, silver in regular use as jewelry may be exempt in some interpretations. Current silver price: {price}/gram.",
+      goldValue: "Include the current market value of all gold you own, including jewelry, coins, and bullion. Gold that's in regular use as jewelry may be exempt in some interpretations. Current gold price: {{price}}/gram.",
+      silverValue: "Include the current market value of all silver you own, including jewelry, coins, and bullion. Like gold, silver in regular use as jewelry may be exempt in some interpretations. Current silver price: {{price}}/gram.",
       otherInvestments: "Include stocks, mutual funds, cryptocurrency, retirement accounts (according to some scholars), rental property values (excluding the portion used for personal residence), and any other non-business investments held for at least one lunar year.",
       businessAssets: "Include inventory held for sale, raw materials, finished goods, and trade goods. Fixed assets like equipment and buildings used in running the business are generally exempt. Different business types have different Zakat calculations; consult a scholar for specific guidance.",
       debtsOwed: "Include personal debts due immediately, business debts, short-term loans, credit card balances, outstanding bills, taxes due, and any other liabilities that are currently payable. Long-term mortgage payments (except the amount due now) are typically not deducted."

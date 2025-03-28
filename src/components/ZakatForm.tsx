@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +12,7 @@ interface ZakatFormProps {
 }
 
 const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
-  const { t, getCurrencySymbol } = useLanguage();
+  const { t, getCurrencySymbol, currency } = useLanguage();
   const [values, setValues] = useState<ZakatValues>({
     cashAmount: 0,
     goldValue: 0,
@@ -36,9 +35,13 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
     onCalculate(values);
   };
 
-  // Calculate the current nisab threshold
-  const nisabThreshold = calculateNisabThreshold();
+  // Calculate the current nisab threshold based on the selected currency
+  const nisabThreshold = calculateNisabThreshold(currency);
   const currencySymbol = getCurrencySymbol();
+  
+  // Get the metal prices for the current currency
+  const goldPrice = PreciousMetalPrices[currency].goldPricePerGram;
+  const silverPrice = PreciousMetalPrices[currency].silverPricePerGram;
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-up">
@@ -53,11 +56,11 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
           <div className="bg-zakat-50 p-4 rounded-lg space-y-2">
             <div className="flex justify-between text-sm">
               <span>{t('zakatForm.nisab.goldPrice')}:</span>
-              <span className="font-medium">{currencySymbol}{PreciousMetalPrices.goldPricePerGram.toFixed(2)}/{t('zakatForm.nisab.gram')}</span>
+              <span className="font-medium">{currencySymbol}{goldPrice.toFixed(2)}/{t('zakatForm.nisab.gram')}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span>{t('zakatForm.nisab.silverPrice')}:</span>
-              <span className="font-medium">{currencySymbol}{PreciousMetalPrices.silverPricePerGram.toFixed(2)}/{t('zakatForm.nisab.gram')}</span>
+              <span className="font-medium">{currencySymbol}{silverPrice.toFixed(2)}/{t('zakatForm.nisab.gram')}</span>
             </div>
             <div className="flex justify-between text-sm font-medium pt-2 border-t border-zakat-100">
               <span>{t('zakatForm.nisab.threshold')}:</span>
@@ -101,7 +104,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                     <Info className="h-4 w-4 text-zakat-500 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    <p>{t('zakatForm.tooltips.goldValue', { price: currencySymbol + PreciousMetalPrices.goldPricePerGram.toFixed(2) })}</p>
+                    <p>{t('zakatForm.tooltips.goldValue', { price: `${currencySymbol}${goldPrice.toFixed(2)}` })}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -124,7 +127,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                     <Info className="h-4 w-4 text-zakat-500 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    <p>{t('zakatForm.tooltips.silverValue', { price: currencySymbol + PreciousMetalPrices.silverPricePerGram.toFixed(2) })}</p>
+                    <p>{t('zakatForm.tooltips.silverValue', { price: `${currencySymbol}${silverPrice.toFixed(2)}` })}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>

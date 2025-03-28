@@ -59,6 +59,9 @@ const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
     
     return `${getCurrencySymbol()}${amount}`;
   };
+  
+  // Get fitr amount for current currency
+  const fitrAmount = PreciousMetalPrices[currency].fitrAmountPerPerson;
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-up">
@@ -142,7 +145,7 @@ const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
               <p className="text-xs text-zakat-600 mt-2">
                 {values.paymentMethod === 'food' 
                   ? t('zakatFitr.foodHelper')
-                  : `${t('zakatFitr.moneyHelper')} ${formatCurrency(PreciousMetalPrices.fitrAmountPerPerson)} ${t('zakatFitr.perPerson')}`}
+                  : `${t('zakatFitr.moneyHelper')} ${formatCurrency(fitrAmount)} ${t('zakatFitr.perPerson')}`}
               </p>
             </div>
           </div>
