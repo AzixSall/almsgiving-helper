@@ -26,16 +26,16 @@ const Index: React.FC = () => {
   const [fitrResults, setFitrResults] = useState<ZakatFitrResults | null>(null);
   const [showForm, setShowForm] = useState(true);
   const [zakatType, setZakatType] = useState<ZakatType>('regular');
-  const { t, currency } = useLanguage();
+  const { t } = useLanguage();
 
   const handleCalculate = (values: ZakatValues) => {
-    const calculatedResults = calculateZakat(values, currency);
+    const calculatedResults = calculateZakat(values);
     setResults(calculatedResults);
     setShowForm(false);
   };
 
   const handleCalculateFitr = (values: ZakatFitrValues) => {
-    const calculatedResults = calculateZakatFitr(values, currency);
+    const calculatedResults = calculateZakatFitr(values);
     setFitrResults(calculatedResults);
     setShowForm(false);
   };
@@ -59,7 +59,7 @@ const Index: React.FC = () => {
         <div className="mb-4">
           <Link to="/">
             <Button variant="outline" size="sm" className="flex items-center gap-1">
-              <Home className="h-4 w-4" /> {t('common.backToHome')}
+              <Home className="h-4 w-4" /> Back to Home
             </Button>
           </Link>
         </div>
