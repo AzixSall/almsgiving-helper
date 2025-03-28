@@ -46,10 +46,22 @@ const ZakatFitrResult: React.FC<ZakatFitrResultProps> = ({ results, onReset }) =
           </div>
         </div>
         
-        <div className="mt-6 p-4 bg-zakat-50 border border-zakat-100 rounded-lg">
-          <p className="text-sm text-zakat-700 text-center">
-            Zakat al-Fitr should be paid before Eid prayer for it to be valid Zakat.
-            If paid after, it becomes regular charity.
+        <div className="mt-6 p-4 bg-zakat-50 border border-zakat-100 rounded-lg space-y-3">
+          <h3 className="text-sm font-medium text-zakat-700">Important Notes on Zakat al-Fitr:</h3>
+          <ul className="text-sm text-zakat-700 list-disc pl-5 space-y-2">
+            <li>Zakat al-Fitr should be paid before Eid prayer for it to be valid Zakat. If paid after, it becomes regular charity.</li>
+            <li>It should be distributed to the eligible poor and needy in your local community whenever possible.</li>
+            <li>Every Muslim who has food in excess of their needs must pay Zakat al-Fitr for themselves and their dependents.</li>
+            <li>The payment should ideally be made 1-2 days before Eid al-Fitr, though it can be paid earlier during Ramadan.</li>
+          </ul>
+        </div>
+        
+        <div className="p-4 bg-zakat-50 border border-zakat-100 rounded-lg">
+          <h3 className="text-sm font-medium text-zakat-700 mb-2">What is a Sa'a?</h3>
+          <p className="text-sm text-zakat-700">
+            A Sa'a is a unit of measurement equivalent to approximately 2.5-3kg of staple food 
+            (like wheat, rice, barley, or dates) that was commonly used during the time of the Prophet Muhammad (PBUH). 
+            The food should be of good quality, the kind that you would eat yourself.
           </p>
         </div>
         

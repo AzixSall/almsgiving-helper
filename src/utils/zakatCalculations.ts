@@ -92,15 +92,33 @@ export const calculateZakat = (values: ZakatValues): ZakatResults => {
   };
 };
 
+/**
+ * Calculates Zakat al-Fitr based on the number of family members and payment method
+ * 
+ * Zakat al-Fitr (also known as Sadaqat al-Fitr or Fitrana) is a charitable donation that 
+ * every Muslim is required to pay at the end of Ramadan, before the Eid prayer. It serves 
+ * to purify the fasting person from any indecent act or speech committed during Ramadan and 
+ * to help the poor and needy celebrate Eid.
+ * 
+ * Key points about Zakat al-Fitr:
+ * 1. It is obligatory upon every Muslim who has food in excess of their needs.
+ * 2. It must be paid for oneself and for all dependents.
+ * 3. Traditionally paid in food (a Sa'a, approx 2.5-3kg of staple food).
+ * 4. Can be paid in monetary equivalent in many modern contexts.
+ * 5. Must be paid before the Eid prayer to be considered valid Zakat al-Fitr.
+ * 
+ * @param values - Object containing family members count and payment method (food or money)
+ * @returns Object with calculated Zakat al-Fitr amount based on input values
+ */
 export const calculateZakatFitr = (values: ZakatFitrValues): ZakatFitrResults => {
   // Calculate total Zakat al-Fitr
   let totalAmount = 0;
   
   if (values.paymentMethod === 'food') {
-    // 1 Sa'a of food per person
+    // 1 Sa'a of food per person (in units of Sa'a)
     totalAmount = values.familyMembers;
   } else {
-    // Money equivalent
+    // Money equivalent based on the configured amount per person
     totalAmount = values.familyMembers * PreciousMetalPrices.fitrAmountPerPerson;
   }
   
