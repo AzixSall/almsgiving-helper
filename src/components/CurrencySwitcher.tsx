@@ -1,80 +1,45 @@
 
 import React from 'react';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import { BadgeDollarSign, BadgeEuro, Banknote } from 'lucide-react';
 import { useLanguage, CurrencyType } from '@/contexts/LanguageContext';
 
 const CurrencySwitcher: React.FC = () => {
   const { currency, changeCurrency, t } = useLanguage();
-  
+
   const handleCurrencyChange = (newCurrency: CurrencyType) => {
     changeCurrency(newCurrency);
   };
 
-  const getCurrencyIcon = (currencyType: CurrencyType) => {
-    switch(currencyType) {
-      case 'USD':
-        return <BadgeDollarSign className="h-4 w-4 mr-2" />;
-      case 'EUR':
-        return <BadgeEuro className="h-4 w-4 mr-2" />;
-      case 'XOF':
-        return <Banknote className="h-4 w-4 mr-2" />;
-      default:
-        return null;
-    }
-  };
-
-  const getCurrencyName = (currencyType: CurrencyType) => {
-    switch(currencyType) {
-      case 'USD':
-        return t('currency.usdFull');
-      case 'EUR':
-        return t('currency.eurFull');
-      case 'XOF':
-        return t('currency.xofFull');
-      default:
-        return '';
-    }
-  };
-
   return (
-    <div className="flex items-center">
-      <Select value={currency} onValueChange={(value) => handleCurrencyChange(value as CurrencyType)}>
-        <SelectTrigger className="w-[180px] bg-white">
-          <SelectValue placeholder="Select Currency">
-            <div className="flex items-center">
-              {getCurrencyIcon(currency)}
-              {getCurrencyName(currency)}
-            </div>
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="USD" className="flex items-center">
-            <div className="flex items-center">
-              <BadgeDollarSign className="h-4 w-4 mr-2" />
-              {t('currency.usdFull')}
-            </div>
-          </SelectItem>
-          <SelectItem value="EUR">
-            <div className="flex items-center">
-              <BadgeEuro className="h-4 w-4 mr-2" />
-              {t('currency.eurFull')}
-            </div>
-          </SelectItem>
-          <SelectItem value="XOF">
-            <div className="flex items-center">
-              <Banknote className="h-4 w-4 mr-2" />
-              {t('currency.xofFull')}
-            </div>
-          </SelectItem>
-        </SelectContent>
-      </Select>
+    <div className="flex items-center space-x-2">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => handleCurrencyChange('USD')}
+        className={`p-1 ${currency === 'USD' ? 'bg-zakat-100 text-zakat-900' : 'text-zakat-600'}`}
+        aria-label={t('currency.usd')}
+      >
+        <BadgeDollarSign className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => handleCurrencyChange('EUR')}
+        className={`p-1 ${currency === 'EUR' ? 'bg-zakat-100 text-zakat-900' : 'text-zakat-600'}`}
+        aria-label={t('currency.eur')}
+      >
+        <BadgeEuro className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => handleCurrencyChange('XOF')}
+        className={`p-1 ${currency === 'XOF' ? 'bg-zakat-100 text-zakat-900' : 'text-zakat-600'}`}
+        aria-label={t('currency.xof')}
+      >
+        <Banknote className="h-4 w-4" />
+      </Button>
     </div>
   );
 };

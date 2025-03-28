@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { ZakatValues, getCurrentPrices, calculateNisabThreshold, PreciousMetalPrices } from '@/utils/zakatCalculations';
+import { ZakatValues, PreciousMetalPrices, calculateNisabThreshold } from '@/utils/zakatCalculations';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
-import { useLanguage } from '@/contexts/LanguageContext';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface ZakatFormProps {
   onCalculate: (values: ZakatValues) => void;
 }
 
 const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
-  const { t, currency, getCurrencySymbol } = useLanguage();
   const [values, setValues] = useState<ZakatValues>({
     cashAmount: 0,
     goldValue: 0,
@@ -21,14 +21,6 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
     debtsOwed: 0,
     businessAssets: 0
   });
-
-  const [currentPrices, setCurrentPrices] = useState(() => getCurrentPrices(currency));
-  const [nisabThreshold, setNisabThreshold] = useState(() => calculateNisabThreshold(currency));
-
-  useEffect(() => {
-    setCurrentPrices(getCurrentPrices(currency));
-    setNisabThreshold(calculateNisabThreshold(currency));
-  }, [currency]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,13 +35,8 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
     onCalculate(values);
   };
 
-  const formatCurrency = (amount: number) => {
-    if (currency === 'XOF') {
-      return `${amount.toFixed(2)} ${getCurrencySymbol()}`;
-    }
-    
-    return `${getCurrencySymbol()}${amount.toFixed(2)}`;
-  };
+  // Calculate the current nisab threshold
+  const nisabThreshold = calculateNisabThreshold();
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-up">
@@ -65,15 +52,15 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
           <div className="bg-zakat-50 p-4 rounded-lg space-y-2">
             <div className="flex justify-between text-sm">
               <span>Current Gold Price:</span>
-              <span className="font-medium">{formatCurrency(currentPrices.goldPricePerGram)}/gram</span>
+              <span className="font-medium">${PreciousMetalPrices.goldPricePerGram.toFixed(2)}/gram</span>
             </div>
             <div className="flex justify-between text-sm">
               <span>Current Silver Price:</span>
-              <span className="font-medium">{formatCurrency(currentPrices.silverPricePerGram)}/gram</span>
+              <span className="font-medium">${PreciousMetalPrices.silverPricePerGram.toFixed(2)}/gram</span>
             </div>
             <div className="flex justify-between text-sm font-medium pt-2 border-t border-zakat-100">
               <span>Current Nisab Threshold:</span>
-              <span className="text-zakat-800">{formatCurrency(nisabThreshold)}</span>
+              <span className="text-zakat-800">${nisabThreshold.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -242,7 +229,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
           type="submit" 
           className="bg-zakat-600 hover:bg-zakat-700 text-white px-8 py-2 rounded-full transition-all duration-300 shadow-soft hover:shadow-md"
         >
-          {t('zakatForm.calculate')}
+          Calculate Zakat
         </Button>
       </div>
     </form>

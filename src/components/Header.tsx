@@ -3,7 +3,6 @@ import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import CurrencySwitcher from './CurrencySwitcher';
-import AdminPriceEditor from './AdminPriceEditor';
 
 const Header: React.FC = () => {
   const { t } = useLanguage();
@@ -11,7 +10,6 @@ const Header: React.FC = () => {
   return (
     <header className="py-6 px-6 sm:px-8 flex flex-col items-center animate-fade-in">
       <div className="w-full flex justify-end mb-2 space-x-4">
-        <AdminPriceEditor />
         <CurrencySwitcher />
         <LanguageSwitcher />
       </div>
