@@ -1,10 +1,13 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ZakatForm from '@/components/ZakatForm';
 import ZakatResult from '@/components/ZakatResult';
 import { ZakatValues, ZakatResults, calculateZakat } from '@/utils/zakatCalculations';
+import { Button } from '@/components/ui/button';
+import { Home } from 'lucide-react';
 
 const Index: React.FC = () => {
   const [results, setResults] = useState<ZakatResults | null>(null);
@@ -24,6 +27,14 @@ const Index: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white to-zakat-50">
       <div className="max-w-4xl w-full mx-auto px-4 py-8 flex flex-col">
+        <div className="mb-4">
+          <Link to="/">
+            <Button variant="outline" size="sm" className="flex items-center gap-1">
+              <Home className="h-4 w-4" /> Back to Home
+            </Button>
+          </Link>
+        </div>
+        
         <Header />
         
         <main className="flex-1 my-8">
