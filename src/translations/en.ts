@@ -68,5 +68,23 @@ export const en = {
   language: {
     en: "English",
     fr: "Français"
+  },
+  currency: {
+    usd: "US Dollar",
+    eur: "Euro",
+    xof: "CFA Franc"
+  },
+  notifications: {
+    imageSaved: "Image saved",
+    imageSaveError: "Error saving image",
+    shareSuccess: "Shared successfully",
+    shareNotSupported: "Sharing is not supported on this browser",
+    shareError: "Error sharing"
+  },
+  share: {
+    title: "My Zakat calculation",
+    text: "Here's my Zakat calculation",
+    fitrTitle: "My Zakat al-Fitr calculation",
+    fitrText: "Here's my Zakat al-Fitr calculation"
   }
 };

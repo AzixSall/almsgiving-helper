@@ -17,6 +17,7 @@ import {
 } from '@/utils/zakatCalculations';
 import { Button } from '@/components/ui/button';
 import { Home, Calculator } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 type ZakatType = 'regular' | 'fitr';
 
@@ -25,6 +26,7 @@ const Index: React.FC = () => {
   const [fitrResults, setFitrResults] = useState<ZakatFitrResults | null>(null);
   const [showForm, setShowForm] = useState(true);
   const [zakatType, setZakatType] = useState<ZakatType>('regular');
+  const { t } = useLanguage();
 
   const handleCalculate = (values: ZakatValues) => {
     const calculatedResults = calculateZakat(values);
@@ -71,7 +73,7 @@ const Index: React.FC = () => {
             className={zakatType === 'regular' ? 'bg-zakat-600 hover:bg-zakat-700' : ''}
           >
             <Calculator className="mr-2 h-4 w-4" />
-            Annual Zakat
+            {t('tabs.annual')}
           </Button>
           <Button
             variant={zakatType === 'fitr' ? 'default' : 'outline'}
@@ -79,7 +81,7 @@ const Index: React.FC = () => {
             className={zakatType === 'fitr' ? 'bg-zakat-600 hover:bg-zakat-700' : ''}
           >
             <Calculator className="mr-2 h-4 w-4" />
-            Zakat al-Fitr
+            {t('tabs.fitr')}
           </Button>
         </div>
         
