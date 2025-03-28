@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -53,6 +54,8 @@ interface ZakatFormProps {
 const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
   const { t, currency } = useLanguage();
 
+  // Fix: Define the form with proper string types for inputs, since we're handling HTML inputs
+  // and they will be transformed to numbers by Zod before submission
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
