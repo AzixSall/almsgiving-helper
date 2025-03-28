@@ -68,5 +68,22 @@ export const en = {
   language: {
     en: "English",
     fr: "Français"
+  },
+  currency: {
+    usd: "USD",
+    eur: "EUR",
+    xof: "XOF",
+    usdFull: "US Dollar",
+    eurFull: "Euro",
+    xofFull: "Franc CFA"
+  },
+  admin: {
+    settings: "Admin Settings",
+    editPrices: "Edit Metal Prices",
+    editPricesDescription: "Update the current prices for gold, silver, and Zakat al-Fitr amount per person.",
+    goldPricePerGram: "Gold Price/Gram",
+    silverPricePerGram: "Silver Price/Gram",
+    fitrAmountPerPerson: "Fitr Amount/Person",
+    saveChanges: "Save Changes"
   }
 };
