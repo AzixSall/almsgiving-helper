@@ -43,7 +43,27 @@ const currencyRates = {
   XOF: 610    // 1 USD = 610 XOF (approximate)
 };
 
-// Load saved prices from localStorage if they exist
+// Default precious metal prices - these would normally come from environment variables
+// but for this demo we're hardcoding them here
+const DEFAULT_PRICES = {
+  USD: {
+    goldPricePerGram: 75.50,
+    silverPricePerGram: 0.95,
+    fitrAmountPerPerson: 10
+  },
+  EUR: {
+    goldPricePerGram: 70.22,
+    silverPricePerGram: 0.88,
+    fitrAmountPerPerson: 9.30
+  },
+  XOF: {
+    goldPricePerGram: 46055,
+    silverPricePerGram: 579.5,
+    fitrAmountPerPerson: 6100
+  }
+};
+
+// Load saved prices from localStorage if they exist, otherwise use defaults
 const loadSavedPrices = (): { [key in CurrencyType]: PriceUpdate } => {
   const savedPrices = localStorage.getItem('zakatPrices');
   if (savedPrices) {
@@ -53,23 +73,7 @@ const loadSavedPrices = (): { [key in CurrencyType]: PriceUpdate } => {
       console.error("Failed to parse saved prices", e);
     }
   }
-  return {
-    USD: {
-      goldPricePerGram: 75.50,
-      silverPricePerGram: 0.95,
-      fitrAmountPerPerson: 10
-    },
-    EUR: {
-      goldPricePerGram: 70.22,
-      silverPricePerGram: 0.88,
-      fitrAmountPerPerson: 9.30
-    },
-    XOF: {
-      goldPricePerGram: 46055,
-      silverPricePerGram: 579.5,
-      fitrAmountPerPerson: 6100
-    }
-  };
+  return DEFAULT_PRICES;
 };
 
 // Configurable values for admins - base prices in USD
@@ -124,6 +128,19 @@ export const updatePreciousMetalPrices = (prices: PriceUpdate, currency: Currenc
 
   // Save to localStorage
   localStorage.setItem('zakatPrices', JSON.stringify(PreciousMetalPrices.currencyPrices));
+};
+
+// Reset prices to defaults (as if from env file)
+export const resetToDefaultPrices = (currency: CurrencyType) => {
+  // Reset to default values
+  localStorage.removeItem('zakatPrices');
+  PreciousMetalPrices.currencyPrices = {...DEFAULT_PRICES};
+  
+  // Set current prices based on currency
+  const currentPrices = PreciousMetalPrices.currencyPrices[currency];
+  PreciousMetalPrices.goldPricePerGram = currentPrices.goldPricePerGram;
+  PreciousMetalPrices.silverPricePerGram = currentPrices.silverPricePerGram;
+  PreciousMetalPrices.fitrAmountPerPerson = currentPrices.fitrAmountPerPerson;
 };
 
 // Get current prices based on selected currency
