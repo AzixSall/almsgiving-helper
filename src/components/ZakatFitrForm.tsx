@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import { ZakatFitrValues, PreciousMetalPrices } from '@/utils/zakatCalculations';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ZakatFitrFormProps {
   onCalculate: (values: ZakatFitrValues) => void;
 }
 
 const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
+  const { t, currency, getCurrencySymbol } = useLanguage();
+  
   const [values, setValues] = useState<ZakatFitrValues>({
     familyMembers: 1,
     paymentMethod: 'food'
@@ -49,33 +52,41 @@ const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
     onCalculate(values);
   };
 
+  const formatCurrency = (amount: number) => {
+    if (currency === 'XOF') {
+      return `${amount} ${getCurrencySymbol()}`;
+    }
+    
+    return `${getCurrencySymbol()}${amount}`;
+  };
+
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-up">
       <div className="space-y-5">
         <div className="glass-card p-6">
-          <h2 className="text-lg font-medium text-zakat-800 mb-4">Zakat al-Fitr Details</h2>
+          <h2 className="text-lg font-medium text-zakat-800 mb-4">{t('zakatFitr.title')}</h2>
           
           <div className="bg-zakat-50 border border-zakat-100 rounded-lg p-4 mb-6">
-            <h3 className="text-sm font-medium text-zakat-800 mb-2">What is Zakat al-Fitr?</h3>
+            <h3 className="text-sm font-medium text-zakat-800 mb-2">{t('zakatFitr.what')}</h3>
             <p className="text-xs text-zakat-700">
-              Zakat al-Fitr is a special charity paid by every Muslim at the end of Ramadan. It helps purify the fasting person from any indecent act or speech and helps the poor celebrate Eid. It must be paid before the Eid prayer to be considered valid Zakat al-Fitr.
+              {t('zakatFitr.explanation')}
             </p>
           </div>
           
           <div className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="familyMembers" className="text-sm font-medium text-zakat-700">Number of Family Members</Label>
+                <Label htmlFor="familyMembers" className="text-sm font-medium text-zakat-700">{t('zakatFitr.familyMembers')}</Label>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button variant="ghost" size="icon" className="h-5 w-5 p-0 rounded-full">
                         <Info className="h-4 w-4 text-zakat-600" />
-                        <span className="sr-only">Family Members Info</span>
+                        <span className="sr-only">{t('zakatFitr.familyMembers')}</span>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs">
-                      <p>Include all individuals for whom you are responsible for paying Zakat al-Fitr, including yourself, spouse, children, and any dependents living in your household.</p>
+                      <p>{t('zakatFitr.familyMembersTooltip')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -90,22 +101,22 @@ const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
                 onChange={handleInputChange}
                 className="subtle-border"
               />
-              <p className="text-xs text-zakat-600 mt-1">Include all household members you're paying Zakat for</p>
+              <p className="text-xs text-zakat-600 mt-1">{t('zakatFitr.familyMembersHelper')}</p>
             </div>
             
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium text-zakat-700">Payment Method</Label>
+                <Label className="text-sm font-medium text-zakat-700">{t('zakatFitr.paymentMethod')}</Label>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button variant="ghost" size="icon" className="h-5 w-5 p-0 rounded-full">
                         <Info className="h-4 w-4 text-zakat-600" />
-                        <span className="sr-only">Payment Method Info</span>
+                        <span className="sr-only">{t('zakatFitr.paymentMethod')}</span>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs">
-                      <p>Zakat al-Fitr can be paid either in food (a Sa'a, which is approximately 2.5-3kg of staple food) or its monetary equivalent per person. The monetary value is currently set at ${PreciousMetalPrices.fitrAmountPerPerson} per person.</p>
+                      <p>{t('zakatFitr.paymentMethodTooltip')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -117,7 +128,7 @@ const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
                   className={values.paymentMethod === 'food' ? 'bg-zakat-600 hover:bg-zakat-700' : ''}
                   onClick={() => handlePaymentMethodChange('food')}
                 >
-                  Food (Sa'a)
+                  {t('zakatFitr.food')}
                 </Button>
                 <Button
                   type="button"
@@ -125,13 +136,13 @@ const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
                   className={values.paymentMethod === 'money' ? 'bg-zakat-600 hover:bg-zakat-700' : ''}
                   onClick={() => handlePaymentMethodChange('money')}
                 >
-                  Money
+                  {t('zakatFitr.money')}
                 </Button>
               </div>
               <p className="text-xs text-zakat-600 mt-2">
                 {values.paymentMethod === 'food' 
-                  ? "A Sa'a is approximately 2.5-3kg of staple food like rice, wheat, or barley."
-                  : `The current monetary value is set at ${PreciousMetalPrices.fitrAmountPerPerson} USD per person.`}
+                  ? t('zakatFitr.foodHelper')
+                  : `${t('zakatFitr.moneyHelper')} ${formatCurrency(PreciousMetalPrices.fitrAmountPerPerson)} ${t('zakatFitr.perPerson')}`}
               </p>
             </div>
           </div>
@@ -143,7 +154,7 @@ const ZakatFitrForm: React.FC<ZakatFitrFormProps> = ({ onCalculate }) => {
           type="submit" 
           className="bg-zakat-600 hover:bg-zakat-700 text-white px-8 py-2 rounded-full transition-all duration-300 shadow-soft hover:shadow-md"
         >
-          Calculate Zakat al-Fitr
+          {t('zakatFitr.calculate')}
         </Button>
       </div>
     </form>

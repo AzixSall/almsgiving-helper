@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { ZakatResults } from '@/utils/zakatCalculations';
 import { Button } from '@/components/ui/button';
@@ -14,16 +13,24 @@ interface ZakatResultProps {
 
 const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
   const resultRef = useRef<HTMLDivElement>(null);
-  const { t, locale } = useLanguage();
+  const { t, locale, currency, getCurrencySymbol } = useLanguage();
 
   if (!results) return null;
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'en-US', {
+    let currencyCode = currency;
+    let localeString = locale === 'fr' ? 'fr-FR' : 'en-US';
+    
+    // For XOF, we'll handle it specially since it may not be widely supported
+    if (currency === 'XOF') {
+      return `${amount.toFixed(0)} ${getCurrencySymbol()}`;
+    }
+    
+    return new Intl.NumberFormat(localeString, {
       style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      currency: currencyCode,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount);
   };
 
@@ -43,10 +50,10 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
       link.href = image;
       link.click();
       
-      toast.success(locale === 'fr' ? 'Résultats de Zakat enregistrés en tant qu\'image' : 'Zakat results saved as image');
+      toast.success(t('notifications.imageSaved'));
     } catch (err) {
       console.error('Failed to save image:', err);
-      toast.error(locale === 'fr' ? 'Échec de l\'enregistrement de l\'image' : 'Failed to save image');
+      toast.error(t('notifications.imageSaveError'));
     }
   };
 
@@ -66,19 +73,19 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
         const blob = await (await fetch(image)).blob();
         
         await navigator.share({
-          title: locale === 'fr' ? 'Mes résultats de calcul de Zakat' : 'My Zakat Calculation Results',
-          text: locale === 'fr' ? 'Voici mes résultats de calcul de Zakat' : 'Here are my Zakat calculation results',
+          title: t('share.title'),
+          text: t('share.text'),
           files: [new File([blob], 'zakat-calculation.png', { type: 'image/png' })],
         });
         
-        toast.success(locale === 'fr' ? 'Résultats partagés avec succès' : 'Successfully shared results');
+        toast.success(t('notifications.shareSuccess'));
       } else {
         // Fallback for browsers that don't support Web Share API
-        toast.info(locale === 'fr' ? 'Le partage n\'est pas pris en charge sur ce navigateur' : 'Sharing not supported on this browser');
+        toast.info(t('notifications.shareNotSupported'));
       }
     } catch (err) {
       console.error('Error sharing:', err);
-      toast.error(locale === 'fr' ? 'Échec du partage des résultats' : 'Failed to share results');
+      toast.error(t('notifications.shareError'));
     }
   };
 

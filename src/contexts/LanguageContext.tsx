@@ -2,16 +2,24 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { translations, LocaleType } from '../translations';
 
+export type CurrencyType = 'USD' | 'EUR' | 'XOF';
+
 type LanguageContextType = {
   locale: LocaleType;
+  currency: CurrencyType;
   t: (key: string) => string;
   changeLanguage: (locale: LocaleType) => void;
+  changeCurrency: (currency: CurrencyType) => void;
+  getCurrencySymbol: () => string;
 };
 
 const defaultLanguageContext: LanguageContextType = {
-  locale: 'en',
+  locale: 'fr',
+  currency: 'XOF',
   t: () => '',
   changeLanguage: () => {},
+  changeCurrency: () => {},
+  getCurrencySymbol: () => '',
 };
 
 const LanguageContext = createContext<LanguageContextType>(defaultLanguageContext);
@@ -19,12 +27,32 @@ const LanguageContext = createContext<LanguageContextType>(defaultLanguageContex
 export const useLanguage = () => useContext(LanguageContext);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [locale, setLocale] = useState<LocaleType>('en');
+  const [locale, setLocale] = useState<LocaleType>('fr');
+  const [currency, setCurrency] = useState<CurrencyType>('XOF');
 
   const changeLanguage = (newLocale: LocaleType) => {
     setLocale(newLocale);
     // Optionally store language preference in localStorage
     localStorage.setItem('preferred-language', newLocale);
+  };
+
+  const changeCurrency = (newCurrency: CurrencyType) => {
+    setCurrency(newCurrency);
+    localStorage.setItem('preferred-currency', newCurrency);
+  };
+
+  // Get currency symbol based on currency type
+  const getCurrencySymbol = (): string => {
+    switch (currency) {
+      case 'USD':
+        return '$';
+      case 'EUR':
+        return '€';
+      case 'XOF':
+        return 'FCFA';
+      default:
+        return '';
+    }
   };
 
   // Translation function that looks up the key in the translations object
@@ -49,10 +77,15 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     if (storedLanguage && (storedLanguage === 'en' || storedLanguage === 'fr')) {
       setLocale(storedLanguage);
     }
+
+    const storedCurrency = localStorage.getItem('preferred-currency') as CurrencyType | null;
+    if (storedCurrency && (storedCurrency === 'USD' || storedCurrency === 'EUR' || storedCurrency === 'XOF')) {
+      setCurrency(storedCurrency);
+    }
   }, []);
 
   return (
-    <LanguageContext.Provider value={{ locale, t, changeLanguage }}>
+    <LanguageContext.Provider value={{ locale, currency, t, changeLanguage, changeCurrency, getCurrencySymbol }}>
       {children}
     </LanguageContext.Provider>
   );
