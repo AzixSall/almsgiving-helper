@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -104,7 +105,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                     <Info className="h-4 w-4 text-zakat-500 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    <p>{t('zakatForm.tooltips.goldValue', { price: `${currencySymbol}${goldPrice.toFixed(2)}` })}</p>
+                    <p>{t('zakatForm.tooltips.goldValue')}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -127,7 +128,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                     <Info className="h-4 w-4 text-zakat-500 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    <p>{t('zakatForm.tooltips.silverValue', { price: `${currencySymbol}${silverPrice.toFixed(2)}` })}</p>
+                    <p>{t('zakatForm.tooltips.silverValue')}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
