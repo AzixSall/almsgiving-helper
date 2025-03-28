@@ -1,4 +1,3 @@
-
 export interface ZakatValues {
   cashAmount: number;
   goldValue: number;
@@ -15,6 +14,17 @@ export interface ZakatResults {
   zakatPayable: number;
   eligibleForZakat: boolean;
   nisabThreshold: number;
+}
+
+export interface ZakatFitrValues {
+  familyMembers: number;
+  paymentMethod: 'food' | 'money';
+}
+
+export interface ZakatFitrResults {
+  familyMembers: number;
+  paymentMethod: 'food' | 'money';
+  totalAmount: number;
 }
 
 // Calculate Nisab threshold (approximately)
@@ -56,5 +66,25 @@ export const calculateZakat = (values: ZakatValues): ZakatResults => {
     zakatPayable,
     eligibleForZakat,
     nisabThreshold
+  };
+};
+
+export const calculateZakatFitr = (values: ZakatFitrValues): ZakatFitrResults => {
+  // Calculate total Zakat al-Fitr
+  let totalAmount = 0;
+  
+  if (values.paymentMethod === 'food') {
+    // 1 Sa'a of food per person
+    totalAmount = values.familyMembers;
+  } else {
+    // Money equivalent (approximately $10 per person - this varies by region)
+    // In a real implementation, this would be fetched from an API as it changes
+    totalAmount = values.familyMembers * 10;
+  }
+  
+  return {
+    familyMembers: values.familyMembers,
+    paymentMethod: values.paymentMethod,
+    totalAmount
   };
 };

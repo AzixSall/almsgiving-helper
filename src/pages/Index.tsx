@@ -5,13 +5,26 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ZakatForm from '@/components/ZakatForm';
 import ZakatResult from '@/components/ZakatResult';
-import { ZakatValues, ZakatResults, calculateZakat } from '@/utils/zakatCalculations';
+import ZakatFitrForm from '@/components/ZakatFitrForm';
+import ZakatFitrResult from '@/components/ZakatFitrResult';
+import { 
+  ZakatValues, 
+  ZakatResults, 
+  calculateZakat,
+  ZakatFitrValues,
+  ZakatFitrResults,
+  calculateZakatFitr
+} from '@/utils/zakatCalculations';
 import { Button } from '@/components/ui/button';
-import { Home } from 'lucide-react';
+import { Home, Calculator } from 'lucide-react';
+
+type ZakatType = 'regular' | 'fitr';
 
 const Index: React.FC = () => {
   const [results, setResults] = useState<ZakatResults | null>(null);
+  const [fitrResults, setFitrResults] = useState<ZakatFitrResults | null>(null);
   const [showForm, setShowForm] = useState(true);
+  const [zakatType, setZakatType] = useState<ZakatType>('regular');
 
   const handleCalculate = (values: ZakatValues) => {
     const calculatedResults = calculateZakat(values);
@@ -19,8 +32,22 @@ const Index: React.FC = () => {
     setShowForm(false);
   };
 
+  const handleCalculateFitr = (values: ZakatFitrValues) => {
+    const calculatedResults = calculateZakatFitr(values);
+    setFitrResults(calculatedResults);
+    setShowForm(false);
+  };
+
   const handleReset = () => {
     setResults(null);
+    setFitrResults(null);
+    setShowForm(true);
+  };
+
+  const switchZakatType = (type: ZakatType) => {
+    setZakatType(type);
+    setResults(null);
+    setFitrResults(null);
     setShowForm(true);
   };
 
@@ -37,12 +64,39 @@ const Index: React.FC = () => {
         
         <Header />
         
+        <div className="flex justify-center gap-4 my-6">
+          <Button
+            variant={zakatType === 'regular' ? 'default' : 'outline'}
+            onClick={() => switchZakatType('regular')}
+            className={zakatType === 'regular' ? 'bg-zakat-600 hover:bg-zakat-700' : ''}
+          >
+            <Calculator className="mr-2 h-4 w-4" />
+            Annual Zakat
+          </Button>
+          <Button
+            variant={zakatType === 'fitr' ? 'default' : 'outline'}
+            onClick={() => switchZakatType('fitr')}
+            className={zakatType === 'fitr' ? 'bg-zakat-600 hover:bg-zakat-700' : ''}
+          >
+            <Calculator className="mr-2 h-4 w-4" />
+            Zakat al-Fitr
+          </Button>
+        </div>
+        
         <main className="flex-1 my-8">
           <div className="relative">
-            {showForm ? (
+            {zakatType === 'regular' && showForm && (
               <ZakatForm onCalculate={handleCalculate} />
-            ) : (
+            )}
+            {zakatType === 'regular' && !showForm && results && (
               <ZakatResult results={results} onReset={handleReset} />
+            )}
+            
+            {zakatType === 'fitr' && showForm && (
+              <ZakatFitrForm onCalculate={handleCalculateFitr} />
+            )}
+            {zakatType === 'fitr' && !showForm && fitrResults && (
+              <ZakatFitrResult results={fitrResults} onReset={handleReset} />
             )}
           </div>
         </main>
