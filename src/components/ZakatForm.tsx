@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -67,7 +66,14 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    onCalculate(values);
+    onCalculate({
+      cashAmount: values.cashAmount,
+      goldValue: values.goldValue,
+      silverValue: values.silverValue,
+      otherInvestments: values.otherInvestments,
+      businessAssets: values.businessAssets,
+      debtsOwed: values.debtsOwed,
+    });
   };
 
   return (
