@@ -1,3 +1,4 @@
+
 export const fr = {
   header: {
     title: "Calculateur de Zakat",
@@ -12,6 +13,41 @@ export const fr = {
     save: "Enregistrer",
     share: "Partager",
     backToHome: "Retour à l'accueil"
+  },
+  homePage: {
+    title: "La Vertu de Donner la Zakat",
+    subtitle: "La Zakat est l'un des cinq piliers de l'Islam, purifiant à la fois l'âme et la richesse tout en aidant les personnes dans le besoin.",
+    calculateButton: "Calculez Votre Zakat",
+    calculateNowButton: "Calculez Votre Zakat Maintenant",
+    hadithsTitle: "Hadiths sur l'Importance de la Zakat",
+    hadithLabel: "Hadith",
+    benefitsTitle: "Avantages de Donner la Zakat",
+    hadiths: {
+      1: {
+        text: "Le Prophète (ﷺ) a dit : 'Donnez l'aumône sans délai, car elle se dresse sur le chemin de la calamité.'",
+        source: "Al-Tirmidhi"
+      },
+      2: {
+        text: "Le Prophète (ﷺ) a dit : 'L'ombre du croyant le Jour de la Résurrection sera sa charité.'",
+        source: "Tirmidhi"
+      },
+      3: {
+        text: "Le Prophète (ﷺ) a dit : 'La charité ne diminue pas la richesse.'",
+        source: "Muslim"
+      },
+      4: {
+        text: "Le Prophète (ﷺ) a dit : 'Quand un homme meurt, ses actes prennent fin sauf pour trois choses : la Sadaqah Jariyah (charité continue), la connaissance qui est bénéfique, ou un descendant vertueux qui prie pour lui.'",
+        source: "Muslim"
+      }
+    },
+    benefits: {
+      1: "Purifie la richesse et l'âme de l'avidité et de l'attachement",
+      2: "Aide à construire une société plus équitable",
+      3: "Favorise la responsabilité sociale et l'empathie",
+      4: "Apporte des bénédictions (barakah) à votre richesse et à votre vie",
+      5: "Accomplit un pilier obligatoire de l'Islam",
+      6: "Aide les personnes dans le besoin avec dignité"
+    }
   },
   zakatForm: {
     assets: "Actifs",

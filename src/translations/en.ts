@@ -1,3 +1,4 @@
+
 export const en = {
   header: {
     title: "Zakat Calculator",
@@ -12,6 +13,41 @@ export const en = {
     save: "Save",
     share: "Share",
     backToHome: "Back to Home"
+  },
+  homePage: {
+    title: "The Virtue of Giving Zakat",
+    subtitle: "Zakat is one of the five pillars of Islam, purifying both the soul and wealth while helping those in need.",
+    calculateButton: "Calculate Your Zakat",
+    calculateNowButton: "Calculate Your Zakat Now",
+    hadithsTitle: "Hadiths on the Importance of Zakat",
+    hadithLabel: "Hadith",
+    benefitsTitle: "Benefits of Giving Zakat",
+    hadiths: {
+      1: {
+        text: "The Prophet (ﷺ) said: 'Give charity without delay, for it stands in the way of calamity.'",
+        source: "Al-Tirmidhi"
+      },
+      2: {
+        text: "The Prophet (ﷺ) said: 'The believer's shade on the Day of Resurrection will be his charity.'",
+        source: "Tirmidhi"
+      },
+      3: {
+        text: "The Prophet (ﷺ) said: 'Charity does not decrease wealth.'",
+        source: "Muslim"
+      },
+      4: {
+        text: "The Prophet (ﷺ) said: 'When a man dies, his deeds come to an end except for three things: Sadaqah Jariyah (continuous charity), knowledge which is beneficial, or a virtuous descendant who prays for him.'",
+        source: "Muslim"
+      }
+    },
+    benefits: {
+      1: "Purifies wealth and soul from greed and attachment",
+      2: "Helps build a more equitable society",
+      3: "Promotes social responsibility and empathy",
+      4: "Brings blessings (barakah) to your wealth and life",
+      5: "Fulfills an obligatory pillar of Islam",
+      6: "Helps those in need with dignity"
+    }
   },
   zakatForm: {
     assets: "Assets",
