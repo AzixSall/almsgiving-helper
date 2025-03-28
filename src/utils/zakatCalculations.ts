@@ -1,4 +1,3 @@
-
 export interface ZakatValues {
   cashAmount: number;
   goldValue: number;
@@ -59,6 +58,22 @@ export const PreciousMetalPrices = {
   
   // Zakat rate (2.5%)
   zakatRate: 0.025
+};
+
+/**
+ * Get the price per gram for a specific precious metal based on the selected currency
+ * @param metal The precious metal (gold or silver)
+ * @param currency The selected currency
+ * @returns The price per gram of the selected metal in the selected currency
+ */
+export const getPreciousMetalPricePerGram = (
+  metal: 'gold' | 'silver', 
+  currency: 'USD' | 'EUR' | 'XOF' = 'USD'
+): number => {
+  if (metal === 'gold') {
+    return PreciousMetalPrices[currency].goldPricePerGram;
+  }
+  return PreciousMetalPrices[currency].silverPricePerGram;
 };
 
 // Calculate Nisab threshold based on the lower of gold and silver values

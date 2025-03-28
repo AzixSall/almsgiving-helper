@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { QuestionMarkCircled } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getPreciousMetalPricePerGram } from '@/utils/zakatCalculations';
 
@@ -85,7 +86,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <QuestionMarkCircled className="h-4 w-4 text-gray-500 cursor-pointer" />
+                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-800 text-gray-50">
                             {t('zakatForm.tooltips.cashAmount')}
@@ -110,7 +111,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <QuestionMarkCircled className="h-4 w-4 text-gray-500 cursor-pointer" />
+                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-800 text-gray-50">
                             {t('zakatForm.tooltips.goldValue').replace('{price}', getPreciousMetalPricePerGram('gold', currency).toString())}
@@ -135,7 +136,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <QuestionMarkCircled className="h-4 w-4 text-gray-500 cursor-pointer" />
+                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-800 text-gray-50">
                             {t('zakatForm.tooltips.silverValue').replace('{price}', getPreciousMetalPricePerGram('silver', currency).toString())}
@@ -160,7 +161,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <QuestionMarkCircled className="h-4 w-4 text-gray-500 cursor-pointer" />
+                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-800 text-gray-50">
                             {t('zakatForm.tooltips.otherInvestments')}
@@ -185,7 +186,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <QuestionMarkCircled className="h-4 w-4 text-gray-500 cursor-pointer" />
+                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-800 text-gray-50">
                             {t('zakatForm.tooltips.businessAssets')}
@@ -210,7 +211,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <QuestionMarkCircled className="h-4 w-4 text-gray-500 cursor-pointer" />
+                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
                           </TooltipTrigger>
                           <TooltipContent className="bg-gray-800 text-gray-50">
                             {t('zakatForm.tooltips.debtsOwed')}
