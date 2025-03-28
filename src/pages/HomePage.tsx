@@ -6,34 +6,37 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Heart } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HomePage: React.FC = () => {
+  const { t } = useLanguage();
+  
   const hadiths = [
     {
-      text: "The Prophet (ﷺ) said: 'Give charity without delay, for it stands in the way of calamity.'",
-      source: "Al-Tirmidhi"
+      text: t('homepage.hadiths.hadith1'),
+      source: t('homepage.hadiths.source1')
     },
     {
-      text: "The Prophet (ﷺ) said: 'The believer's shade on the Day of Resurrection will be his charity.'",
-      source: "Tirmidhi"
+      text: t('homepage.hadiths.hadith2'),
+      source: t('homepage.hadiths.source2')
     },
     {
-      text: "The Prophet (ﷺ) said: 'Charity does not decrease wealth.'",
-      source: "Muslim"
+      text: t('homepage.hadiths.hadith3'),
+      source: t('homepage.hadiths.source3')
     },
     {
-      text: "The Prophet (ﷺ) said: 'When a man dies, his deeds come to an end except for three things: Sadaqah Jariyah (continuous charity), knowledge which is beneficial, or a virtuous descendant who prays for him.'",
-      source: "Muslim"
+      text: t('homepage.hadiths.hadith4'),
+      source: t('homepage.hadiths.source4')
     }
   ];
 
   const benefits = [
-    "Purifies wealth and soul from greed and attachment",
-    "Helps build a more equitable society",
-    "Promotes social responsibility and empathy",
-    "Brings blessings (barakah) to your wealth and life",
-    "Fulfills an obligatory pillar of Islam",
-    "Helps those in need with dignity"
+    t('homepage.benefits.benefit1'),
+    t('homepage.benefits.benefit2'),
+    t('homepage.benefits.benefit3'),
+    t('homepage.benefits.benefit4'),
+    t('homepage.benefits.benefit5'),
+    t('homepage.benefits.benefit6')
   ];
 
   return (
@@ -44,15 +47,15 @@ const HomePage: React.FC = () => {
         <main className="flex-1 my-8">
           <div className="text-center mb-12 animate-fade-in">
             <h1 className="text-4xl md:text-5xl font-bold text-zakat-900 mb-4">
-              The Virtue of Giving Zakat
+              {t('homepage.title')}
             </h1>
             <p className="text-zakat-700 text-lg max-w-2xl mx-auto">
-              Zakat is one of the five pillars of Islam, purifying both the soul and wealth while helping those in need.
+              {t('homepage.subtitle')}
             </p>
             <div className="mt-8">
               <Link to="/calculator">
                 <Button size="lg" className="bg-zakat-600 hover:bg-zakat-700">
-                  Calculate Your Zakat <ArrowRight className="ml-2 h-4 w-4" />
+                  {t('homepage.calculateButton')} <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </div>
@@ -60,13 +63,13 @@ const HomePage: React.FC = () => {
 
           <div className="mb-12">
             <h2 className="text-2xl font-semibold text-zakat-800 mb-6 text-center">
-              Hadiths on the Importance of Zakat
+              {t('homepage.hadithsTitle')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {hadiths.map((hadith, index) => (
                 <Card key={index} className="glass-card hover:shadow-md transition-shadow duration-200">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-medium text-zakat-700">Hadith</CardTitle>
+                    <CardTitle className="text-lg font-medium text-zakat-700">{t('homepage.hadithLabel')}</CardTitle>
                     <CardDescription className="text-sm text-zakat-500">{hadith.source}</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -79,7 +82,7 @@ const HomePage: React.FC = () => {
 
           <div className="mb-12">
             <h2 className="text-2xl font-semibold text-zakat-800 mb-6 text-center">
-              Benefits of Giving Zakat
+              {t('homepage.benefitsTitle')}
             </h2>
             <Card className="glass-card">
               <CardContent className="pt-6">
@@ -98,7 +101,7 @@ const HomePage: React.FC = () => {
           <div className="text-center">
             <Link to="/calculator">
               <Button size="lg" className="bg-zakat-600 hover:bg-zakat-700">
-                Calculate Your Zakat Now
+                {t('homepage.calculateNowButton')}
               </Button>
             </Link>
           </div>
