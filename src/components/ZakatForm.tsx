@@ -1,257 +1,242 @@
-
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { HelpCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { ZakatValues, PreciousMetalPrices, calculateNisabThreshold } from '@/utils/zakatCalculations';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getPreciousMetalPricePerGram } from '@/utils/zakatCalculations';
-
-const formSchema = z.object({
-  cashAmount: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  goldValue: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  silverValue: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  otherInvestments: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  businessAssets: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  debtsOwed: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-});
 
 interface ZakatFormProps {
-  onCalculate: (values: {
-    cashAmount: number;
-    goldValue: number;
-    silverValue: number;
-    otherInvestments: number;
-    businessAssets: number;
-    debtsOwed: number;
-  }) => void;
+  onCalculate: (values: ZakatValues) => void;
 }
 
 const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
-  const { t, currency } = useLanguage();
-
-  // Fix: Define the form with proper string types for inputs, since we're handling HTML inputs
-  // and they will be transformed to numbers by Zod before submission
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      cashAmount: '0',
-      goldValue: '0',
-      silverValue: '0',
-      otherInvestments: '0',
-      businessAssets: '0',
-      debtsOwed: '0',
-    },
+  const { t, getCurrencySymbol, currency } = useLanguage();
+  const [values, setValues] = useState<ZakatValues>({
+    cashAmount: 0,
+    goldValue: 0,
+    silverValue: 0,
+    otherInvestments: 0,
+    debtsOwed: 0,
+    businessAssets: 0
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    onCalculate({
-      cashAmount: values.cashAmount,
-      goldValue: values.goldValue,
-      silverValue: values.silverValue,
-      otherInvestments: values.otherInvestments,
-      businessAssets: values.businessAssets,
-      debtsOwed: values.debtsOwed,
-    });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues(prev => ({
+      ...prev,
+      [name]: parseFloat(value) || 0
+    }));
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onCalculate(values);
+  };
+
+  // Calculate the current nisab threshold based on the selected currency
+  const nisabThreshold = calculateNisabThreshold(currency);
+  const currencySymbol = getCurrencySymbol();
+  
+  // Get the metal prices for the current currency
+  const goldPrice = PreciousMetalPrices[currency].goldPricePerGram;
+  const silverPrice = PreciousMetalPrices[currency].silverPricePerGram;
+
   return (
-    <div className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-in-left">
-      <Card className="glass-card">
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
+    <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-up">
+      <div className="space-y-5">
+        {/* Nisab Explanation Card */}
+        <div className="glass-card p-6 mb-6">
+          <h2 className="text-lg font-medium text-zakat-800 mb-2">{t('zakatForm.nisab.title')}</h2>
+          <p className="text-sm text-zakat-700 mb-3">
+            {t('zakatForm.nisab.explanation')}
+          </p>
+          
+          <div className="bg-zakat-50 p-4 rounded-lg space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>{t('zakatForm.nisab.goldPrice')}:</span>
+              <span className="font-medium">{currencySymbol}{goldPrice.toFixed(2)}/{t('zakatForm.nisab.gram')}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span>{t('zakatForm.nisab.silverPrice')}:</span>
+              <span className="font-medium">{currencySymbol}{silverPrice.toFixed(2)}/{t('zakatForm.nisab.gram')}</span>
+            </div>
+            <div className="flex justify-between text-sm font-medium pt-2 border-t border-zakat-100">
+              <span>{t('zakatForm.nisab.threshold')}:</span>
+              <span className="text-zakat-800">{currencySymbol}{nisabThreshold.toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-medium text-zakat-800 mb-4">{t('zakatForm.assets')}</h2>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="cashAmount" className="text-sm font-medium text-zakat-700">{t('zakatForm.cashBankBalances')}</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>{t('zakatForm.tooltips.cashAmount')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <Input
+                id="cashAmount"
                 name="cashAmount"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>{t('zakatForm.cashBankBalances')}</FormLabel>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-50">
-                            {t('zakatForm.tooltips.cashAmount')}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                    <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                placeholder="0.00"
+                value={values.cashAmount || ''}
+                onChange={handleInputChange}
+                className="subtle-border"
               />
-              <FormField
-                control={form.control}
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="goldValue" className="text-sm font-medium text-zakat-700">{t('zakatForm.goldValue')}</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>{t('zakatForm.tooltips.goldValue', { price: `${currencySymbol}${goldPrice.toFixed(2)}` })}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <Input
+                id="goldValue"
                 name="goldValue"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>{t('zakatForm.goldValue')}</FormLabel>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-50">
-                            {t('zakatForm.tooltips.goldValue').replace('{price}', getPreciousMetalPricePerGram('gold', currency).toString())}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                    <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                placeholder="0.00"
+                value={values.goldValue || ''}
+                onChange={handleInputChange}
+                className="subtle-border"
               />
-              <FormField
-                control={form.control}
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="silverValue" className="text-sm font-medium text-zakat-700">{t('zakatForm.silverValue')}</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>{t('zakatForm.tooltips.silverValue', { price: `${currencySymbol}${silverPrice.toFixed(2)}` })}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <Input
+                id="silverValue"
                 name="silverValue"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>{t('zakatForm.silverValue')}</FormLabel>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-50">
-                            {t('zakatForm.tooltips.silverValue').replace('{price}', getPreciousMetalPricePerGram('silver', currency).toString())}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                    <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                placeholder="0.00"
+                value={values.silverValue || ''}
+                onChange={handleInputChange}
+                className="subtle-border"
               />
-              <FormField
-                control={form.control}
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="otherInvestments" className="text-sm font-medium text-zakat-700">{t('zakatForm.otherInvestments')}</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>{t('zakatForm.tooltips.otherInvestments')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <Input
+                id="otherInvestments"
                 name="otherInvestments"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>{t('zakatForm.otherInvestments')}</FormLabel>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-50">
-                            {t('zakatForm.tooltips.otherInvestments')}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                    <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                placeholder="0.00"
+                value={values.otherInvestments || ''}
+                onChange={handleInputChange}
+                className="subtle-border"
               />
-              <FormField
-                control={form.control}
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="businessAssets" className="text-sm font-medium text-zakat-700">{t('zakatForm.businessAssets')}</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>{t('zakatForm.tooltips.businessAssets')}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <Input
+                id="businessAssets"
                 name="businessAssets"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>{t('zakatForm.businessAssets')}</FormLabel>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-50">
-                            {t('zakatForm.tooltips.businessAssets')}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                    <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                type="number"
+                placeholder="0.00"
+                value={values.businessAssets || ''}
+                onChange={handleInputChange}
+                className="subtle-border"
               />
-              <FormField
-                control={form.control}
-                name="debtsOwed"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>{t('zakatForm.debtsLiabilities')}</FormLabel>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="h-4 w-4 text-gray-500 cursor-pointer" />
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-gray-800 text-gray-50">
-                            {t('zakatForm.tooltips.debtsOwed')}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                    <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full bg-zakat-600 hover:bg-zakat-700">
-                {t('zakatForm.calculate')}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-      <div className="mt-6 p-4 bg-zakat-50 border border-zakat-100 rounded-lg space-y-3">
-        <h3 className="text-sm font-medium text-zakat-700">{t('zakatForm.notes.title')}</h3>
-        <ul className="text-sm text-zakat-700 list-disc pl-5 space-y-2">
-          <li>{t('zakatForm.notes.note1')}</li>
-          <li>{t('zakatForm.notes.note2')}</li>
-          <li>{t('zakatForm.notes.note3')}</li>
-          <li>{t('zakatForm.notes.note4')}</li>
-        </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div className="glass-card p-6">
+          <h2 className="text-lg font-medium text-zakat-800 mb-4">{t('zakatForm.liabilities')}</h2>
+          
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Label htmlFor="debtsOwed" className="text-sm font-medium text-zakat-700">{t('zakatForm.debtsLiabilities')}</Label>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p>{t('zakatForm.tooltips.debtsOwed')}</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <Input
+              id="debtsOwed"
+              name="debtsOwed"
+              type="number"
+              placeholder="0.00"
+              value={values.debtsOwed || ''}
+              onChange={handleInputChange}
+              className="subtle-border"
+            />
+          </div>
+        </div>
+        
+        <div className="p-4 bg-zakat-50 border border-zakat-100 rounded-lg text-sm text-zakat-700">
+          <p className="font-medium mb-2">{t('zakatForm.notes.title')}:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>{t('zakatForm.notes.note1')}</li>
+            <li>{t('zakatForm.notes.note2')}</li>
+            <li>{t('zakatForm.notes.note3')}</li>
+            <li>{t('zakatForm.notes.note4')}</li>
+          </ul>
+        </div>
       </div>
-    </div>
+      
+      <div className="mt-8 flex justify-center">
+        <Button 
+          type="submit" 
+          className="bg-zakat-600 hover:bg-zakat-700 text-white px-8 py-2 rounded-full transition-all duration-300 shadow-soft hover:shadow-md"
+        >
+          {t('zakatForm.calculate')}
+        </Button>
+      </div>
+    </form>
   );
 };
 
