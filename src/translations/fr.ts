@@ -1,4 +1,3 @@
-
 export const fr = {
   header: {
     title: "Calculateur de Zakat",
@@ -11,7 +10,8 @@ export const fr = {
   common: {
     calculateAgain: "Calculer à nouveau",
     save: "Enregistrer",
-    share: "Partager"
+    share: "Partager",
+    backToHome: "Retour à l'accueil"
   },
   homepage: {
     title: "La Vertu de Donner la Zakat",
