@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {
   Form,
   FormControl,
@@ -19,64 +17,35 @@ import { HelpCircle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getPreciousMetalPricePerGram } from '@/utils/zakatCalculations';
 
-const formSchema = z.object({
-  cashAmount: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  goldValue: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  silverValue: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  otherInvestments: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  businessAssets: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-  debtsOwed: z.string().refine(value => !isNaN(parseFloat(value)), {
-    message: "Please enter a valid number.",
-  }).transform(value => parseFloat(value)),
-});
+interface ZakatFormValues {
+  cashAmount: number;
+  goldValue: number;
+  silverValue: number;
+  otherInvestments: number;
+  businessAssets: number;
+  debtsOwed: number;
+}
 
 interface ZakatFormProps {
-  onCalculate: (values: {
-    cashAmount: number;
-    goldValue: number;
-    silverValue: number;
-    otherInvestments: number;
-    businessAssets: number;
-    debtsOwed: number;
-  }) => void;
+  onCalculate: (values: ZakatFormValues) => void;
 }
 
 const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
   const { t, currency } = useLanguage();
 
-  // Fix: Define the form with proper string types for inputs, since we're handling HTML inputs
-  // and they will be transformed to numbers by Zod before submission
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ZakatFormValues>({
     defaultValues: {
-      cashAmount: '0',
-      goldValue: '0',
-      silverValue: '0',
-      otherInvestments: '0',
-      businessAssets: '0',
-      debtsOwed: '0',
+      cashAmount: 0,
+      goldValue: 0,
+      silverValue: 0,
+      otherInvestments: 0,
+      businessAssets: 0,
+      debtsOwed: 0,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    onCalculate({
-      cashAmount: values.cashAmount,
-      goldValue: values.goldValue,
-      silverValue: values.silverValue,
-      otherInvestments: values.otherInvestments,
-      businessAssets: values.businessAssets,
-      debtsOwed: values.debtsOwed,
-    });
+  const onSubmit = (values: ZakatFormValues) => {
+    onCalculate(values);
   };
 
   return (
@@ -88,7 +57,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
               <FormField
                 control={form.control}
                 name="cashAmount"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel>{t('zakatForm.cashBankBalances')}</FormLabel>
@@ -104,7 +73,12 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       </TooltipProvider>
                     </div>
                     <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
+                      <Input 
+                        placeholder="0" 
+                        type="number" 
+                        onChange={(e) => onChange(Number(e.target.value))} 
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -113,7 +87,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
               <FormField
                 control={form.control}
                 name="goldValue"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel>{t('zakatForm.goldValue')}</FormLabel>
@@ -129,7 +103,12 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       </TooltipProvider>
                     </div>
                     <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
+                      <Input 
+                        placeholder="0" 
+                        type="number" 
+                        onChange={(e) => onChange(Number(e.target.value))}  
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -138,7 +117,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
               <FormField
                 control={form.control}
                 name="silverValue"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel>{t('zakatForm.silverValue')}</FormLabel>
@@ -154,7 +133,12 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       </TooltipProvider>
                     </div>
                     <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
+                      <Input 
+                        placeholder="0" 
+                        type="number"
+                        onChange={(e) => onChange(Number(e.target.value))}
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -163,7 +147,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
               <FormField
                 control={form.control}
                 name="otherInvestments"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel>{t('zakatForm.otherInvestments')}</FormLabel>
@@ -179,7 +163,12 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       </TooltipProvider>
                     </div>
                     <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
+                      <Input 
+                        placeholder="0" 
+                        type="number"
+                        onChange={(e) => onChange(Number(e.target.value))}
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -188,7 +177,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
               <FormField
                 control={form.control}
                 name="businessAssets"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel>{t('zakatForm.businessAssets')}</FormLabel>
@@ -204,7 +193,12 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       </TooltipProvider>
                     </div>
                     <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
+                      <Input 
+                        placeholder="0" 
+                        type="number"
+                        onChange={(e) => onChange(Number(e.target.value))}  
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -213,7 +207,7 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
               <FormField
                 control={form.control}
                 name="debtsOwed"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <div className="flex justify-between items-center">
                       <FormLabel>{t('zakatForm.debtsLiabilities')}</FormLabel>
@@ -229,7 +223,12 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
                       </TooltipProvider>
                     </div>
                     <FormControl>
-                      <Input placeholder="0" type="number" {...field} />
+                      <Input 
+                        placeholder="0" 
+                        type="number"
+                        onChange={(e) => onChange(Number(e.target.value))}
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
