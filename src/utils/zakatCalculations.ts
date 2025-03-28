@@ -43,6 +43,35 @@ const currencyRates = {
   XOF: 610    // 1 USD = 610 XOF (approximate)
 };
 
+// Load saved prices from localStorage if they exist
+const loadSavedPrices = (): { [key in CurrencyType]: PriceUpdate } => {
+  const savedPrices = localStorage.getItem('zakatPrices');
+  if (savedPrices) {
+    try {
+      return JSON.parse(savedPrices);
+    } catch (e) {
+      console.error("Failed to parse saved prices", e);
+    }
+  }
+  return {
+    USD: {
+      goldPricePerGram: 75.50,
+      silverPricePerGram: 0.95,
+      fitrAmountPerPerson: 10
+    },
+    EUR: {
+      goldPricePerGram: 70.22,
+      silverPricePerGram: 0.88,
+      fitrAmountPerPerson: 9.30
+    },
+    XOF: {
+      goldPricePerGram: 46055,
+      silverPricePerGram: 579.5,
+      fitrAmountPerPerson: 6100
+    }
+  };
+};
+
 // Configurable values for admins - base prices in USD
 export const PreciousMetalPrices = {
   // Gold price per gram in USD (sample value - should be updated regularly)
@@ -64,23 +93,7 @@ export const PreciousMetalPrices = {
   fitrAmountPerPerson: 10,
 
   // Store prices in different currencies
-  currencyPrices: {
-    USD: {
-      goldPricePerGram: 75.50,
-      silverPricePerGram: 0.95,
-      fitrAmountPerPerson: 10
-    },
-    EUR: {
-      goldPricePerGram: 70.22,  // 75.50 * 0.93
-      silverPricePerGram: 0.88,  // 0.95 * 0.93
-      fitrAmountPerPerson: 9.30  // 10 * 0.93
-    },
-    XOF: {
-      goldPricePerGram: 46055,  // 75.50 * 610
-      silverPricePerGram: 579.5, // 0.95 * 610
-      fitrAmountPerPerson: 6100  // 10 * 610
-    }
-  }
+  currencyPrices: loadSavedPrices()
 };
 
 // Function to update precious metal prices
@@ -108,6 +121,9 @@ export const updatePreciousMetalPrices = (prices: PriceUpdate, currency: Currenc
       PreciousMetalPrices.currencyPrices[targetCurrency].fitrAmountPerPerson = prices.fitrAmountPerPerson / rate;
     }
   });
+
+  // Save to localStorage
+  localStorage.setItem('zakatPrices', JSON.stringify(PreciousMetalPrices.currencyPrices));
 };
 
 // Get current prices based on selected currency
