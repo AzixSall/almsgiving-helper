@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ZakatValues } from '@/utils/zakatCalculations';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 
 interface ZakatFormProps {
   onCalculate: (values: ZakatValues) => void;
@@ -40,7 +42,17 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
           
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="cashAmount" className="text-sm font-medium text-zakat-700">Cash & Bank Balances</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="cashAmount" className="text-sm font-medium text-zakat-700">Cash & Bank Balances</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>Include all cash in hand, checking accounts, savings accounts, and any cash equivalents that you've owned for at least one lunar year.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <Input
                 id="cashAmount"
                 name="cashAmount"
@@ -53,7 +65,17 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="goldValue" className="text-sm font-medium text-zakat-700">Gold Value</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="goldValue" className="text-sm font-medium text-zakat-700">Gold Value</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>Include the current market value of all gold you own, including jewelry, coins, and bullion. Gold that's in regular use as jewelry may be exempt in some interpretations.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <Input
                 id="goldValue"
                 name="goldValue"
@@ -66,7 +88,17 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="silverValue" className="text-sm font-medium text-zakat-700">Silver Value</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="silverValue" className="text-sm font-medium text-zakat-700">Silver Value</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>Include the current market value of all silver you own, including jewelry, coins, and bullion. Like gold, silver in regular use as jewelry may be exempt in some interpretations.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <Input
                 id="silverValue"
                 name="silverValue"
@@ -79,7 +111,17 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="otherInvestments" className="text-sm font-medium text-zakat-700">Other Investments</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="otherInvestments" className="text-sm font-medium text-zakat-700">Other Investments</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>Include stocks, mutual funds, cryptocurrency, retirement accounts (according to some scholars), rental property values (excluding the portion used for personal residence), and any other non-business investments held for at least one lunar year.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <Input
                 id="otherInvestments"
                 name="otherInvestments"
@@ -92,7 +134,17 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="businessAssets" className="text-sm font-medium text-zakat-700">Business Assets</Label>
+              <div className="flex items-center gap-2">
+                <Label htmlFor="businessAssets" className="text-sm font-medium text-zakat-700">Business Assets</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p>Include inventory held for sale, raw materials, finished goods, and trade goods. Fixed assets like equipment and buildings used in running the business are generally exempt. Different business types have different Zakat calculations; consult a scholar for specific guidance.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
               <Input
                 id="businessAssets"
                 name="businessAssets"
@@ -110,7 +162,17 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
           <h2 className="text-lg font-medium text-zakat-800 mb-4">Liabilities</h2>
           
           <div className="space-y-2">
-            <Label htmlFor="debtsOwed" className="text-sm font-medium text-zakat-700">Debts & Liabilities</Label>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="debtsOwed" className="text-sm font-medium text-zakat-700">Debts & Liabilities</Label>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="h-4 w-4 text-zakat-500 cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p>Include personal debts due immediately, business debts, short-term loans, credit card balances, outstanding bills, taxes due, and any other liabilities that are currently payable. Long-term mortgage payments (except the amount due now) are typically not deducted.</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
             <Input
               id="debtsOwed"
               name="debtsOwed"
@@ -121,6 +183,15 @@ const ZakatForm: React.FC<ZakatFormProps> = ({ onCalculate }) => {
               className="subtle-border"
             />
           </div>
+        </div>
+        
+        <div className="p-4 bg-zakat-50 border border-zakat-100 rounded-lg text-sm text-zakat-700">
+          <p className="font-medium mb-2">Important Notes:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Zakat is calculated on wealth owned for a full lunar year.</li>
+            <li>Personal items like your home, car, furniture, and clothing for personal use are exempt.</li>
+            <li>This calculator provides a general guideline. For specific situations, consult with a knowledgeable Islamic scholar.</li>
+          </ul>
         </div>
       </div>
       
