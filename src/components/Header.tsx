@@ -1,16 +1,23 @@
 
 import React from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Header: React.FC = () => {
+  const { t } = useLanguage();
+  
   return (
-    <header className="py-6 px-6 sm:px-8 flex justify-center items-center animate-fade-in">
+    <header className="py-6 px-6 sm:px-8 flex flex-col items-center animate-fade-in">
+      <div className="w-full flex justify-end mb-2">
+        <LanguageSwitcher />
+      </div>
       <div className="flex flex-col items-center">
         <h1 className="text-3xl font-semibold text-center text-zakat-900">
-          Zakat Calculator
+          {t('header.title')}
         </h1>
         <div className="h-1 w-16 bg-zakat-500 rounded-full mt-2"></div>
         <p className="mt-3 text-zakat-700 text-center text-sm max-w-md">
-          Calculate your annual Zakat obligation with precision and ease
+          {t('header.subtitle')}
         </p>
       </div>
     </header>

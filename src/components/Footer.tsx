@@ -1,14 +1,17 @@
 
 import React from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer: React.FC = () => {
+  const { t } = useLanguage();
+  
   return (
     <footer className="py-6 px-6 mt-auto text-center text-sm text-zakat-600">
       <p className="mb-1">
-        This calculator is for guidance purposes only.
+        {t('footer.disclaimer1')}
       </p>
       <p>
-        For specific Zakat rulings, please consult with a qualified scholar.
+        {t('footer.disclaimer2')}
       </p>
     </footer>
   );

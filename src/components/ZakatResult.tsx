@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Share, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ZakatResultProps {
   results: ZakatResults | null;
@@ -13,11 +14,12 @@ interface ZakatResultProps {
 
 const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
   const resultRef = useRef<HTMLDivElement>(null);
+  const { t, locale } = useLanguage();
 
   if (!results) return null;
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(locale === 'fr' ? 'fr-FR' : 'en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
@@ -41,10 +43,10 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
       link.href = image;
       link.click();
       
-      toast.success('Zakat results saved as image');
+      toast.success(locale === 'fr' ? 'Résultats de Zakat enregistrés en tant qu\'image' : 'Zakat results saved as image');
     } catch (err) {
       console.error('Failed to save image:', err);
-      toast.error('Failed to save image');
+      toast.error(locale === 'fr' ? 'Échec de l\'enregistrement de l\'image' : 'Failed to save image');
     }
   };
 
@@ -64,50 +66,50 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
         const blob = await (await fetch(image)).blob();
         
         await navigator.share({
-          title: 'My Zakat Calculation Results',
-          text: 'Here are my Zakat calculation results',
+          title: locale === 'fr' ? 'Mes résultats de calcul de Zakat' : 'My Zakat Calculation Results',
+          text: locale === 'fr' ? 'Voici mes résultats de calcul de Zakat' : 'Here are my Zakat calculation results',
           files: [new File([blob], 'zakat-calculation.png', { type: 'image/png' })],
         });
         
-        toast.success('Successfully shared results');
+        toast.success(locale === 'fr' ? 'Résultats partagés avec succès' : 'Successfully shared results');
       } else {
         // Fallback for browsers that don't support Web Share API
-        toast.info('Sharing not supported on this browser');
+        toast.info(locale === 'fr' ? 'Le partage n\'est pas pris en charge sur ce navigateur' : 'Sharing not supported on this browser');
       }
     } catch (err) {
       console.error('Error sharing:', err);
-      toast.error('Failed to share results');
+      toast.error(locale === 'fr' ? 'Échec du partage des résultats' : 'Failed to share results');
     }
   };
 
   return (
     <div className="w-full max-w-lg mx-auto p-6 sm:p-8 animate-slide-in-right">
       <div ref={resultRef} className="glass-card p-6 space-y-6">
-        <h2 className="text-xl font-semibold text-zakat-800 text-center">Zakat Calculation Results</h2>
+        <h2 className="text-xl font-semibold text-zakat-800 text-center">{t('zakatResult.title')}</h2>
         
         <div className="space-y-5">
           <div className="flex justify-between items-center pb-3 border-b border-zakat-100">
-            <span className="text-zakat-700">Total Assets</span>
+            <span className="text-zakat-700">{t('zakatResult.totalAssets')}</span>
             <span className="font-medium text-zakat-900">{formatCurrency(results.totalAssets)}</span>
           </div>
           
           <div className="flex justify-between items-center pb-3 border-b border-zakat-100">
-            <span className="text-zakat-700">Total Liabilities</span>
+            <span className="text-zakat-700">{t('zakatResult.totalLiabilities')}</span>
             <span className="font-medium text-zakat-900">{formatCurrency(results.totalLiabilities)}</span>
           </div>
           
           <div className="flex justify-between items-center pb-3 border-b border-zakat-100">
-            <span className="text-zakat-700">Net Zakatable Amount</span>
+            <span className="text-zakat-700">{t('zakatResult.netZakatableAmount')}</span>
             <span className="font-medium text-zakat-900">{formatCurrency(results.netZakatableAmount)}</span>
           </div>
           
           <div className="flex justify-between items-center pb-3 border-b border-zakat-100">
-            <span className="text-zakat-700">Nisab Threshold</span>
+            <span className="text-zakat-700">{t('zakatResult.nisabThreshold')}</span>
             <span className="font-medium text-zakat-900">{formatCurrency(results.nisabThreshold)}</span>
           </div>
           
           <div className="flex justify-between items-center mt-4">
-            <span className="text-lg font-medium text-zakat-800">Zakat Payable</span>
+            <span className="text-lg font-medium text-zakat-800">{t('zakatResult.zakatPayable')}</span>
             <span className="text-lg font-bold text-zakat-800">{formatCurrency(results.zakatPayable)}</span>
           </div>
         </div>
@@ -115,8 +117,7 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
         {!results.eligibleForZakat && (
           <div className="mt-4 p-4 bg-zakat-50 border border-zakat-100 rounded-lg">
             <p className="text-sm text-zakat-700 text-center">
-              Your net zakatable assets are below the Nisab threshold. 
-              You are not obligated to pay Zakat this year.
+              {t('zakatResult.belowThreshold')}
             </p>
           </div>
         )}
@@ -128,7 +129,7 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
           variant="outline" 
           className="border-zakat-300 text-zakat-700 hover:bg-zakat-50 px-6 py-2 rounded-full"
         >
-          Calculate Again
+          {t('common.calculateAgain')}
         </Button>
         
         <Button
@@ -137,7 +138,7 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
           className="border-zakat-300 text-zakat-700 hover:bg-zakat-50 px-4 py-2 rounded-full"
         >
           <Download className="mr-1 h-4 w-4" />
-          Save
+          {t('common.save')}
         </Button>
         
         <Button
@@ -146,7 +147,7 @@ const ZakatResult: React.FC<ZakatResultProps> = ({ results, onReset }) => {
           className="border-zakat-300 text-zakat-700 hover:bg-zakat-50 px-4 py-2 rounded-full"
         >
           <Share className="mr-1 h-4 w-4" />
-          Share
+          {t('common.share')}
         </Button>
       </div>
     </div>
